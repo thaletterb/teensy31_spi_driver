@@ -48,14 +48,14 @@ int main (void)
     unsigned char u8vData = 0x01;
     unsigned char u8vRxData = 0;
     
-    PORTC_PCR5 = PORT_PCR_MUX(0x1); // LED is on PC5 (pin 13), config as GPIO (alt = 1)
-    GPIOC_PDDR = (1<<5);            // make this an output pin
-    LED_OFF;                        // start with LED off
+    PORTC_PCR5 = PORT_PCR_MUX(0x1);                 // LED is on PC5 (pin 13), config as GPIO (alt = 1)
+    GPIOC_PDDR = (1<<5);                            // make this an output pin
+    LED_OFF;                                        // start with LED off
     
     
-    vfnDSPIMaster_Init();
-    vfnDSPISlave_Init();
-    (void)u32fnDPSIMaster_SendByte(u8vData,&dspi);
+    vfnDSPIMaster_Init();                           // Init the SPI Master
+    vfnDSPISlave_Init();                            // Init the SPI Slave
+    (void)u32fnDPSIMaster_SendByte(u8vData,&dspi);  // Send byte
 	while(1)
 	{
           u8vData++;
@@ -68,7 +68,7 @@ int main (void)
           }
           else
           {
-              LED_ON;
+              LED_ON;   // Error - Turn on LED
               while(1);
           }
 	} 
@@ -80,22 +80,22 @@ void vfnDSPIMaster_Init(void)
 {
  /* clock gate */
   //SIM_SCGC6 |= SIM_SCGC6_DSPI0_MASK; BV 5-21
-  SIM_SCGC6 |= SIM_SCGC6_SPI0_MASK;
+  SIM_SCGC6 |= SIM_SCGC6_SPI0_MASK; // System Clock Gating Control Register 6. Set SPI0 Bit
+
   /* pin mux */
-
   PORTD_PCR0 &= ~PORT_PCR_MUX_MASK;
-  PORTD_PCR0 |= PORT_PCR_MUX(2); //SPI0_PCS0
+  PORTD_PCR0 |= PORT_PCR_MUX(2);    //SPI0_PCS0 - Alt Function 2
   PORTD_PCR1 &= ~PORT_PCR_MUX_MASK;
-  PORTD_PCR1 |= PORT_PCR_MUX(2); //SPI0_SCK
+  PORTD_PCR1 |= PORT_PCR_MUX(2);    //SPI0_SCK - Alt Function 2
   PORTD_PCR2 &= ~PORT_PCR_MUX_MASK;
-  PORTD_PCR2 |= PORT_PCR_MUX(2); //SPI0_SOUT
+  PORTD_PCR2 |= PORT_PCR_MUX(2);    //SPI0_SOUT - Alt Function 2
   PORTD_PCR3 &= ~PORT_PCR_MUX_MASK;
-  PORTD_PCR3 |= PORT_PCR_MUX(2); //SPI0_SIN
+  PORTD_PCR3 |= PORT_PCR_MUX(2);    //SPI0_SIN - Alt Function 2
 
-  
-   SPI0_CTAR0 = SPI_CTAR_FMSZ(0xF) | SPI_CTAR_CPOL_MASK;
+  SPI0_CTAR0 = SPI_CTAR_FMSZ(0xF) | SPI_CTAR_CPOL_MASK;                     // Clock Transfer and Attributes Register. Frame Size and CPOL
+
   /*Set SPI mode Master, Halt and Incoming data is shifted into the shift register.  */
-  SPI0_MCR = SPI_MCR_MSTR_MASK | SPI_MCR_PCSIS(0x1) | SPI_MCR_HALT_MASK;
+  SPI0_MCR = SPI_MCR_MSTR_MASK | SPI_MCR_PCSIS(0x1) | SPI_MCR_HALT_MASK;    // Module Configuration Register
   
   /*Setting some variables*/
   dspi.br     = 0x00;
@@ -105,16 +105,25 @@ void vfnDSPIMaster_Init(void)
 
 void vfnDSPISlave_Init(void)
 {
-  SIM_SCGC6 |=SIM_SCGC6_SPI1_MASK;
-  
-  PORTE_PCR1 &= ~PORT_PCR_MUX_MASK;
-  PORTE_PCR1 |= PORT_PCR_MUX(2);
-  PORTE_PCR2 &= ~PORT_PCR_MUX_MASK;
-  PORTE_PCR2 |= PORT_PCR_MUX(2);
-  PORTE_PCR3 &= ~PORT_PCR_MUX_MASK;
-  PORTE_PCR3 |= PORT_PCR_MUX(2);
- // PORTE_PCR4 &= ~PORT_PCR_MUX_MASK;
- // PORTE_PCR4 |= PORT_PCR_MUX(2); 
+  SIM_SCGC6 |=SIM_SCGC6_SPI1_MASK;  // System Clock Gating Control Register 6 - Set SPI1 Bit
+ 
+  //// Made For K60/K70 Family - Need to find Equivalent for K20 Family, with Teensy Access 
+  //PORTE_PCR1 &= ~PORT_PCR_MUX_MASK; 
+  //PORTE_PCR1 |= PORT_PCR_MUX(2);    // SPI1_SOUT
+  //PORTE_PCR2 &= ~PORT_PCR_MUX_MASK; 
+  //PORTE_PCR2 |= PORT_PCR_MUX(2);    // SPI1 SCLK
+  //PORTE_PCR3 &= ~PORT_PCR_MUX_MASK;
+  //PORTE_PCR3 |= PORT_PCR_MUX(2);    // SPI1 SIN
+ //// PORTE_PCR4 &= ~PORT_PCR_MUX_MASK;
+ //// PORTE_PCR4 |= PORT_PCR_MUX(2); 
+ 
+  // Made For K60/K70 Family - Need to find Equivalent for K20 Family, with Teensy Access 
+  PORTB_PCR16 &= ~PORT_PCR_MUX_MASK; 
+  PORTB_PCR16 |= PORT_PCR_MUX(2);    // SPI1_SOUT - PTB16 (Teensy 0) (Alt 2)
+  //PORTB_PCR2 &= ~PORT_PCR_MUX_MASK; 
+  //PORTB_PCR2 |= PORT_PCR_MUX(2);    // SPI1 SCLK - 
+  PORTB_PCR17 &= ~PORT_PCR_MUX_MASK;
+  PORTB_PCR17 |= PORT_PCR_MUX(2);    // SPI1 SIN - PTB17 (Teensy 1) (Alt 2)
   
   SPI1_MCR = SPI_MCR_PCSIS(0x1) | SPI_MCR_DIS_TXF_MASK | SPI_MCR_DIS_RXF_MASK ; //  
 }

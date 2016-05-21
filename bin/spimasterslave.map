@@ -15,7 +15,7 @@ LOAD obj/sysinit.o
                 0x0000000020008000                _top_stack = 0x20008000
                 0x0000000000000000                TOTAL_RESERVED_HEAP = 0x0
 
-.text           0x0000000000000000      0xb44
+.text           0x0000000000000000      0xb2c
  CREATE_OBJECT_SYMBOLS
                 0x0000000000000000                __interrupt_vector_table = .
  *(.interrupt_vector_table)
@@ -132,54 +132,54 @@ LOAD obj/sysinit.o
                 0x000000000000049e                Reserved68_IRQHandler
  *(.text)
  .text          0x00000000000004c4        0x0 obj/crt0.o
- .text          0x00000000000004c4      0x270 obj/spimasterslave.o
+ .text          0x00000000000004c4      0x258 obj/spimasterslave.o
                 0x00000000000004c4                main
                 0x000000000000053c                vfnDSPIMaster_Init
                 0x00000000000005f4                vfnDSPISlave_Init
-                0x0000000000000674                u32fnDPSIMaster_SendByte
-                0x00000000000006f0                u32fnDPSIMaster_RxByte
-                0x0000000000000710                u32fnDPSISlave_SendByte
- .text          0x0000000000000734      0x410 obj/sysinit.o
-                0x0000000000000734                start
-                0x0000000000000744                sysinit
-                0x0000000000000818                pll_init
-                0x0000000000000b14                wdog_disable
+                0x000000000000065c                u32fnDPSIMaster_SendByte
+                0x00000000000006d8                u32fnDPSIMaster_RxByte
+                0x00000000000006f8                u32fnDPSISlave_SendByte
+ .text          0x000000000000071c      0x410 obj/sysinit.o
+                0x000000000000071c                start
+                0x000000000000072c                sysinit
+                0x0000000000000800                pll_init
+                0x0000000000000afc                wdog_disable
  *(.text.*)
  *(.glue_7)
  .glue_7        0x0000000000000000        0x0 linker stubs
  *(.glue_7t)
  .glue_7t       0x0000000000000000        0x0 linker stubs
-                0x0000000000000b44                . = ALIGN (0x4)
+                0x0000000000000b2c                . = ALIGN (0x4)
  *(.rodata)
  *(.rodata*)
  *(.init)
  *(.fini)
-                0x0000000000000b44                . = ALIGN (0x4)
-                0x0000000000000b44                _end_data_flash = .
+                0x0000000000000b2c                . = ALIGN (0x4)
+                0x0000000000000b2c                _end_data_flash = .
 
-.vfp11_veneer   0x0000000000000b44        0x0
+.vfp11_veneer   0x0000000000000b2c        0x0
  .vfp11_veneer  0x0000000000000000        0x0 linker stubs
 
-.v4_bx          0x0000000000000b44        0x0
+.v4_bx          0x0000000000000b2c        0x0
  .v4_bx         0x0000000000000000        0x0 linker stubs
 
-.iplt           0x0000000000000b44        0x0
+.iplt           0x0000000000000b2c        0x0
  .iplt          0x0000000000000000        0x0 obj/crt0.o
 
-.rel.dyn        0x0000000000000b44        0x0
+.rel.dyn        0x0000000000000b2c        0x0
  .rel.iplt      0x0000000000000000        0x0 obj/crt0.o
 
 .RAMVectorTable
  *(.RAMVectorTable)
-                0x0000000000000b44                . = ALIGN (0x4)
-                0x0000000000000b44                PROVIDE (__exidx_start, .)
+                0x0000000000000b2c                . = ALIGN (0x4)
+                0x0000000000000b2c                PROVIDE (__exidx_start, .)
 
 .ARM.exidx
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-                0x0000000000000b44                PROVIDE (__exidx_end, .)
+                0x0000000000000b2c                PROVIDE (__exidx_end, .)
 
-.data           0x000000001fff8000        0x0 load address 0x0000000000000b44
-                0x0000000000000b44                _start_data_flash = LOADADDR (.data)
+.data           0x000000001fff8000        0x0 load address 0x0000000000000b2c
+                0x0000000000000b2c                _start_data_flash = LOADADDR (.data)
                 0x000000001fff8000                _start_data = .
  *(.data)
  .data          0x000000001fff8000        0x0 obj/crt0.o
@@ -189,7 +189,7 @@ LOAD obj/sysinit.o
  *(.shdata)
                 0x000000001fff8000                _end_data = .
 
-.igot.plt       0x000000001fff8000        0x0 load address 0x0000000000000b44
+.igot.plt       0x000000001fff8000        0x0 load address 0x0000000000000b2c
  .igot.plt      0x0000000000000000        0x0 obj/crt0.o
                 0x000000001fff8000                . = ALIGN (0x4)
                 0x0000000000000000                _data_size = (_end_data - _start_data)
@@ -199,7 +199,7 @@ LOAD obj/sysinit.o
  *(.noinit.*)
                 0x000000001fff8000                _start_bss = .
 
-.bss            0x000000001fff8000       0x54 load address 0x0000000000000b44
+.bss            0x000000001fff8000       0x54 load address 0x0000000000000b2c
  *(.bss)
  .bss           0x000000001fff8000        0x0 obj/crt0.o
  .bss           0x000000001fff8000       0x44 obj/spimasterslave.o
