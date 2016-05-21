@@ -1,0 +1,402 @@
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+sram             0x000000001fff8000 0x0000000000010000 w !xr
+flash            0x0000000000000000 0x0000000000040000 xr
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+LOAD obj/crt0.o
+LOAD obj/spimasterslave.o
+LOAD obj/sysinit.o
+                0x0000000000002004                TOTAL_RESERVED_STACK = 0x2004
+                0x0000000020008000                _top_stack = 0x20008000
+                0x0000000000000000                TOTAL_RESERVED_HEAP = 0x0
+
+.text           0x0000000000000000      0xb44
+ CREATE_OBJECT_SYMBOLS
+                0x0000000000000000                __interrupt_vector_table = .
+ *(.interrupt_vector_table)
+ .interrupt_vector_table
+                0x0000000000000000      0x410 obj/crt0.o
+ *(.startup)
+ .startup       0x0000000000000410       0xb4 obj/crt0.o
+                0x0000000000000410                _startup
+                0x0000000000000410                Reset_Handler
+                0x000000000000048c                NMI_Handler
+                0x000000000000048e                HardFault_Handler
+                0x0000000000000490                MemManage_Handler
+                0x0000000000000492                BusFault_Handler
+                0x0000000000000494                UsageFault_Handler
+                0x0000000000000496                SVC_Handler
+                0x0000000000000498                DebugMon_Handler
+                0x000000000000049a                PendSV_Handler
+                0x000000000000049c                SysTick_Handler
+                0x000000000000049e                Watchdog_IRQHandler
+                0x000000000000049e                CMP2_IRQHandler
+                0x000000000000049e                Reserved92_IRQHandler
+                0x000000000000049e                UART2_RX_TX_IRQHandler
+                0x000000000000049e                SWI_IRQHandler
+                0x000000000000049e                ADC0_IRQHandler
+                0x000000000000049e                Reserved39_IRQHandler
+                0x000000000000049e                I2S0_Tx_IRQHandler
+                0x000000000000049e                CMT_IRQHandler
+                0x000000000000049e                Reserved57_IRQHandler
+                0x000000000000049e                SPI1_IRQHandler
+                0x000000000000049e                DefaultISR
+                0x000000000000049e                DMA9_IRQHandler
+                0x000000000000049e                Reserved58_IRQHandler
+                0x000000000000049e                DMA14_IRQHandler
+                0x000000000000049e                CMP1_IRQHandler
+                0x000000000000049e                Reserved71_IRQHandler
+                0x000000000000049e                PORTD_IRQHandler
+                0x000000000000049e                Reserved69_IRQHandler
+                0x000000000000049e                PORTB_IRQHandler
+                0x000000000000049e                Reserved33_IRQHandler
+                0x000000000000049e                Reserved70_IRQHandler
+                0x000000000000049e                ADC1_IRQHandler
+                0x000000000000049e                PIT2_IRQHandler
+                0x000000000000049e                I2S0_Rx_IRQHandler
+                0x000000000000049e                LPTimer_IRQHandler
+                0x000000000000049e                Reserved53_IRQHandler
+                0x000000000000049e                DMA5_IRQHandler
+                0x000000000000049e                RTC_IRQHandler
+                0x000000000000049e                PDB0_IRQHandler
+                0x000000000000049e                FTM1_IRQHandler
+                0x000000000000049e                CAN0Xmit_IRQHandler
+                0x000000000000049e                Reserved95_IRQHandler
+                0x000000000000049e                PIT3_IRQHandler
+                0x000000000000049e                UART1Error_IRQHandler
+                0x000000000000049e                MCG_IRQHandler
+                0x000000000000049e                Reserved108_IRQHandler
+                0x000000000000049e                Reserved72_IRQHandler
+                0x000000000000049e                Reserved55_IRQHandler
+                0x000000000000049e                DMA11_IRQHandler
+                0x000000000000049e                Reserved98_IRQHandler
+                0x000000000000049e                DMA7_IRQHandler
+                0x000000000000049e                Reserved102_IRQHandler
+                0x000000000000049e                CAN0Rcv_IRQHandler
+                0x000000000000049e                CAN0BusOff_IRQHandler
+                0x000000000000049e                USBCharge_IRQHandler
+                0x000000000000049e                LLW_IRQHandler
+                0x000000000000049e                CAN0Error_IRQHandler
+                0x000000000000049e                RTCSeconds_IRQHandler
+                0x000000000000049e                Reserved109_IRQHandler
+                0x000000000000049e                DMA13_IRQHandler
+                0x000000000000049e                USBOTG_IRQHandler
+                0x000000000000049e                DMA3_IRQHandler
+                0x000000000000049e                UART0_LON_IRQHandler
+                0x000000000000049e                DMA0_IRQHandler
+                0x000000000000049e                Reserved91_IRQHandler
+                0x000000000000049e                DMA15_IRQHandler
+                0x000000000000049e                DAC0_IRQHandler
+                0x000000000000049e                UART2Error_IRQHandler
+                0x000000000000049e                Reserved94_IRQHandler
+                0x000000000000049e                DMA4_IRQHandler
+                0x000000000000049e                PIT1_IRQHandler
+                0x000000000000049e                CAN0Wake_IRQHandler
+                0x000000000000049e                DMA_Error_IRQHandler
+                0x000000000000049e                LVD_LVW_IRQHandler
+                0x000000000000049e                SPI0_IRQHandler
+                0x000000000000049e                FTM0_IRQHandler
+                0x000000000000049e                PORTA_IRQHandler
+                0x000000000000049e                FlashCmd_IRQHandler
+                0x000000000000049e                DMA12_IRQHandler
+                0x000000000000049e                Reserved44_IRQHandler
+                0x000000000000049e                PORTE_IRQHandler
+                0x000000000000049e                FTM2_IRQHandler
+                0x000000000000049e                Reserved56_IRQHandler
+                0x000000000000049e                DMA8_IRQHandler
+                0x000000000000049e                Reserved93_IRQHandler
+                0x000000000000049e                CAN0Msg_IRQHandler
+                0x000000000000049e                DMA10_IRQHandler
+                0x000000000000049e                UART1_RX_TX_IRQHandler
+                0x000000000000049e                FlashReadErr_IRQHandler
+                0x000000000000049e                CMP0_IRQHandler
+                0x000000000000049e                PORTC_IRQHandler
+                0x000000000000049e                DMA6_IRQHandler
+                0x000000000000049e                DMA1_IRQHandler
+                0x000000000000049e                Reserved96_IRQHandler
+                0x000000000000049e                Reserved67_IRQHandler
+                0x000000000000049e                Reserved54_IRQHandler
+                0x000000000000049e                TSI_IRQHandler
+                0x000000000000049e                I2C0_IRQHandler
+                0x000000000000049e                UART0_RX_TX_IRQHandler
+                0x000000000000049e                I2C1_IRQHandler
+                0x000000000000049e                DMA2_IRQHandler
+                0x000000000000049e                Reserved59_IRQHandler
+                0x000000000000049e                UART0Error_IRQHandler
+                0x000000000000049e                PIT0_IRQHandler
+                0x000000000000049e                Reserved68_IRQHandler
+ *(.text)
+ .text          0x00000000000004c4        0x0 obj/crt0.o
+ .text          0x00000000000004c4      0x270 obj/spimasterslave.o
+                0x00000000000004c4                main
+                0x000000000000053c                vfnDSPIMaster_Init
+                0x00000000000005f4                vfnDSPISlave_Init
+                0x0000000000000674                u32fnDPSIMaster_SendByte
+                0x00000000000006f0                u32fnDPSIMaster_RxByte
+                0x0000000000000710                u32fnDPSISlave_SendByte
+ .text          0x0000000000000734      0x410 obj/sysinit.o
+                0x0000000000000734                start
+                0x0000000000000744                sysinit
+                0x0000000000000818                pll_init
+                0x0000000000000b14                wdog_disable
+ *(.text.*)
+ *(.glue_7)
+ .glue_7        0x0000000000000000        0x0 linker stubs
+ *(.glue_7t)
+ .glue_7t       0x0000000000000000        0x0 linker stubs
+                0x0000000000000b44                . = ALIGN (0x4)
+ *(.rodata)
+ *(.rodata*)
+ *(.init)
+ *(.fini)
+                0x0000000000000b44                . = ALIGN (0x4)
+                0x0000000000000b44                _end_data_flash = .
+
+.vfp11_veneer   0x0000000000000b44        0x0
+ .vfp11_veneer  0x0000000000000000        0x0 linker stubs
+
+.v4_bx          0x0000000000000b44        0x0
+ .v4_bx         0x0000000000000000        0x0 linker stubs
+
+.iplt           0x0000000000000b44        0x0
+ .iplt          0x0000000000000000        0x0 obj/crt0.o
+
+.rel.dyn        0x0000000000000b44        0x0
+ .rel.iplt      0x0000000000000000        0x0 obj/crt0.o
+
+.RAMVectorTable
+ *(.RAMVectorTable)
+                0x0000000000000b44                . = ALIGN (0x4)
+                0x0000000000000b44                PROVIDE (__exidx_start, .)
+
+.ARM.exidx
+ *(.ARM.exidx* .gnu.linkonce.armexidx.*)
+                0x0000000000000b44                PROVIDE (__exidx_end, .)
+
+.data           0x000000001fff8000        0x0 load address 0x0000000000000b44
+                0x0000000000000b44                _start_data_flash = LOADADDR (.data)
+                0x000000001fff8000                _start_data = .
+ *(.data)
+ .data          0x000000001fff8000        0x0 obj/crt0.o
+ .data          0x000000001fff8000        0x0 obj/spimasterslave.o
+ .data          0x000000001fff8000        0x0 obj/sysinit.o
+ *(.data.*)
+ *(.shdata)
+                0x000000001fff8000                _end_data = .
+
+.igot.plt       0x000000001fff8000        0x0 load address 0x0000000000000b44
+ .igot.plt      0x0000000000000000        0x0 obj/crt0.o
+                0x000000001fff8000                . = ALIGN (0x4)
+                0x0000000000000000                _data_size = (_end_data - _start_data)
+
+.noinit
+ *(.noinit)
+ *(.noinit.*)
+                0x000000001fff8000                _start_bss = .
+
+.bss            0x000000001fff8000       0x54 load address 0x0000000000000b44
+ *(.bss)
+ .bss           0x000000001fff8000        0x0 obj/crt0.o
+ .bss           0x000000001fff8000       0x44 obj/spimasterslave.o
+                0x000000001fff8000                dspi
+ .bss           0x000000001fff8044       0x10 obj/sysinit.o
+                0x000000001fff8044                mcg_clk_hz
+                0x000000001fff8048                mcg_clk_khz
+                0x000000001fff804c                core_clk_khz
+                0x000000001fff8050                periph_clk_khz
+ *(.bss.*)
+ *(COMMON)
+                0x000000001fff8054                . = ALIGN (0x4)
+                0x000000001fff8054                PROVIDE (_end_bss, .)
+                0x0000000000000054                bss_size = (_end_bss - _start_bss)
+                0x0000000020005ffc                _start_stack = (_top_stack - TOTAL_RESERVED_STACK)
+                [0x0000000020008000]                _top_stack = _top_stack
+
+/DISCARD/
+ *(.eh_*)
+                0x000000001fff8054                _end = .
+                0x000000001fff8054                PROVIDE (end, .)
+OUTPUT(bin/spimasterslave.elf elf32-littlearm)
+
+.ARM.attributes
+                0x0000000000000000       0x2f
+ .ARM.attributes
+                0x0000000000000000       0x21 obj/crt0.o
+ .ARM.attributes
+                0x0000000000000021       0x33 obj/spimasterslave.o
+ .ARM.attributes
+                0x0000000000000054       0x33 obj/sysinit.o
+
+.comment        0x0000000000000000       0x70
+ .comment       0x0000000000000000       0x70 obj/spimasterslave.o
+                                         0x71 (size before relaxing)
+ .comment       0x0000000000000000       0x71 obj/sysinit.o
+
+.debug_info     0x0000000000000000      0xcf8
+ .debug_info    0x0000000000000000      0x70e obj/spimasterslave.o
+ .debug_info    0x000000000000070e      0x5ea obj/sysinit.o
+
+.debug_abbrev   0x0000000000000000      0x2f9
+ .debug_abbrev  0x0000000000000000      0x187 obj/spimasterslave.o
+ .debug_abbrev  0x0000000000000187      0x172 obj/sysinit.o
+
+.debug_aranges  0x0000000000000000       0x40
+ .debug_aranges
+                0x0000000000000000       0x20 obj/spimasterslave.o
+ .debug_aranges
+                0x0000000000000020       0x20 obj/sysinit.o
+
+.debug_line     0x0000000000000000      0x4bf
+ .debug_line    0x0000000000000000      0x1e4 obj/spimasterslave.o
+ .debug_line    0x00000000000001e4      0x2db obj/sysinit.o
+
+.debug_str      0x0000000000000000      0x5b5
+ .debug_str     0x0000000000000000      0x3d2 obj/spimasterslave.o
+                                        0x417 (size before relaxing)
+ .debug_str     0x00000000000003d2      0x1e3 obj/sysinit.o
+                                        0x3fc (size before relaxing)
+
+.debug_frame    0x0000000000000000      0x134
+ .debug_frame   0x0000000000000000       0xb8 obj/spimasterslave.o
+ .debug_frame   0x00000000000000b8       0x7c obj/sysinit.o
+
+Cross Reference Table
+
+Symbol                                            File
+ADC0_IRQHandler                                   obj/crt0.o
+ADC1_IRQHandler                                   obj/crt0.o
+BusFault_Handler                                  obj/crt0.o
+CAN0BusOff_IRQHandler                             obj/crt0.o
+CAN0Error_IRQHandler                              obj/crt0.o
+CAN0Msg_IRQHandler                                obj/crt0.o
+CAN0Rcv_IRQHandler                                obj/crt0.o
+CAN0Wake_IRQHandler                               obj/crt0.o
+CAN0Xmit_IRQHandler                               obj/crt0.o
+CMP0_IRQHandler                                   obj/crt0.o
+CMP1_IRQHandler                                   obj/crt0.o
+CMP2_IRQHandler                                   obj/crt0.o
+CMT_IRQHandler                                    obj/crt0.o
+DAC0_IRQHandler                                   obj/crt0.o
+DMA0_IRQHandler                                   obj/crt0.o
+DMA10_IRQHandler                                  obj/crt0.o
+DMA11_IRQHandler                                  obj/crt0.o
+DMA12_IRQHandler                                  obj/crt0.o
+DMA13_IRQHandler                                  obj/crt0.o
+DMA14_IRQHandler                                  obj/crt0.o
+DMA15_IRQHandler                                  obj/crt0.o
+DMA1_IRQHandler                                   obj/crt0.o
+DMA2_IRQHandler                                   obj/crt0.o
+DMA3_IRQHandler                                   obj/crt0.o
+DMA4_IRQHandler                                   obj/crt0.o
+DMA5_IRQHandler                                   obj/crt0.o
+DMA6_IRQHandler                                   obj/crt0.o
+DMA7_IRQHandler                                   obj/crt0.o
+DMA8_IRQHandler                                   obj/crt0.o
+DMA9_IRQHandler                                   obj/crt0.o
+DMA_Error_IRQHandler                              obj/crt0.o
+DebugMon_Handler                                  obj/crt0.o
+DefaultISR                                        obj/crt0.o
+FTM0_IRQHandler                                   obj/crt0.o
+FTM1_IRQHandler                                   obj/crt0.o
+FTM2_IRQHandler                                   obj/crt0.o
+FlashCmd_IRQHandler                               obj/crt0.o
+FlashReadErr_IRQHandler                           obj/crt0.o
+HardFault_Handler                                 obj/crt0.o
+I2C0_IRQHandler                                   obj/crt0.o
+I2C1_IRQHandler                                   obj/crt0.o
+I2S0_Rx_IRQHandler                                obj/crt0.o
+I2S0_Tx_IRQHandler                                obj/crt0.o
+LLW_IRQHandler                                    obj/crt0.o
+LPTimer_IRQHandler                                obj/crt0.o
+LVD_LVW_IRQHandler                                obj/crt0.o
+MCG_IRQHandler                                    obj/crt0.o
+MemManage_Handler                                 obj/crt0.o
+NMI_Handler                                       obj/crt0.o
+PDB0_IRQHandler                                   obj/crt0.o
+PIT0_IRQHandler                                   obj/crt0.o
+PIT1_IRQHandler                                   obj/crt0.o
+PIT2_IRQHandler                                   obj/crt0.o
+PIT3_IRQHandler                                   obj/crt0.o
+PORTA_IRQHandler                                  obj/crt0.o
+PORTB_IRQHandler                                  obj/crt0.o
+PORTC_IRQHandler                                  obj/crt0.o
+PORTD_IRQHandler                                  obj/crt0.o
+PORTE_IRQHandler                                  obj/crt0.o
+PendSV_Handler                                    obj/crt0.o
+RTCSeconds_IRQHandler                             obj/crt0.o
+RTC_IRQHandler                                    obj/crt0.o
+Reserved102_IRQHandler                            obj/crt0.o
+Reserved108_IRQHandler                            obj/crt0.o
+Reserved109_IRQHandler                            obj/crt0.o
+Reserved33_IRQHandler                             obj/crt0.o
+Reserved39_IRQHandler                             obj/crt0.o
+Reserved44_IRQHandler                             obj/crt0.o
+Reserved53_IRQHandler                             obj/crt0.o
+Reserved54_IRQHandler                             obj/crt0.o
+Reserved55_IRQHandler                             obj/crt0.o
+Reserved56_IRQHandler                             obj/crt0.o
+Reserved57_IRQHandler                             obj/crt0.o
+Reserved58_IRQHandler                             obj/crt0.o
+Reserved59_IRQHandler                             obj/crt0.o
+Reserved67_IRQHandler                             obj/crt0.o
+Reserved68_IRQHandler                             obj/crt0.o
+Reserved69_IRQHandler                             obj/crt0.o
+Reserved70_IRQHandler                             obj/crt0.o
+Reserved71_IRQHandler                             obj/crt0.o
+Reserved72_IRQHandler                             obj/crt0.o
+Reserved91_IRQHandler                             obj/crt0.o
+Reserved92_IRQHandler                             obj/crt0.o
+Reserved93_IRQHandler                             obj/crt0.o
+Reserved94_IRQHandler                             obj/crt0.o
+Reserved95_IRQHandler                             obj/crt0.o
+Reserved96_IRQHandler                             obj/crt0.o
+Reserved98_IRQHandler                             obj/crt0.o
+Reset_Handler                                     obj/crt0.o
+SPI0_IRQHandler                                   obj/crt0.o
+SPI1_IRQHandler                                   obj/crt0.o
+SVC_Handler                                       obj/crt0.o
+SWI_IRQHandler                                    obj/crt0.o
+SysTick_Handler                                   obj/crt0.o
+TSI_IRQHandler                                    obj/crt0.o
+UART0Error_IRQHandler                             obj/crt0.o
+UART0_LON_IRQHandler                              obj/crt0.o
+UART0_RX_TX_IRQHandler                            obj/crt0.o
+UART1Error_IRQHandler                             obj/crt0.o
+UART1_RX_TX_IRQHandler                            obj/crt0.o
+UART2Error_IRQHandler                             obj/crt0.o
+UART2_RX_TX_IRQHandler                            obj/crt0.o
+USBCharge_IRQHandler                              obj/crt0.o
+USBOTG_IRQHandler                                 obj/crt0.o
+UsageFault_Handler                                obj/crt0.o
+Watchdog_IRQHandler                               obj/crt0.o
+__interrupt_vector_table                          obj/crt0.o
+_data_size                                        obj/crt0.o
+_end_bss                                          obj/crt0.o
+_start_bss                                        obj/crt0.o
+_start_data                                       obj/crt0.o
+_start_data_flash                                 obj/crt0.o
+_startup                                          obj/crt0.o
+_top_stack                                        obj/crt0.o
+core_clk_khz                                      obj/sysinit.o
+dspi                                              obj/spimasterslave.o
+main                                              obj/spimasterslave.o
+                                                  obj/sysinit.o
+mcg_clk_hz                                        obj/sysinit.o
+mcg_clk_khz                                       obj/sysinit.o
+periph_clk_khz                                    obj/sysinit.o
+pll_init                                          obj/sysinit.o
+start                                             obj/sysinit.o
+                                                  obj/crt0.o
+sysinit                                           obj/sysinit.o
+u32fnDPSIMaster_RxByte                            obj/spimasterslave.o
+u32fnDPSIMaster_SendByte                          obj/spimasterslave.o
+u32fnDPSISlave_SendByte                           obj/spimasterslave.o
+vfnDSPIMaster_Init                                obj/spimasterslave.o
+vfnDSPISlave_Init                                 obj/spimasterslave.o
+wdog_disable                                      obj/sysinit.o
+                                                  obj/crt0.o

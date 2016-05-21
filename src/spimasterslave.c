@@ -7,28 +7,32 @@
 #include "common.h"
 
 typedef struct{
-uint32_t mstr;
-uint32_t pcs;
-uint32_t hlt;
-uint32_t fmsz;
-uint32_t cpol;
-uint32_t cpha;
-uint32_t lsbfe;
-uint32_t br;
-uint32_t tcf;
-uint32_t eoqf;
-uint32_t cont;
-uint32_t ctas;
-uint32_t delay;
-uint32_t eoq;
-uint32_t pcsx;
-uint32_t txdata;
-uint32_t buffer;
-        
+    uint32_t mstr;
+    uint32_t pcs;
+    uint32_t hlt;
+    uint32_t fmsz;
+    uint32_t cpol;
+    uint32_t cpha;
+    uint32_t lsbfe;
+    uint32_t br;
+    uint32_t tcf;
+    uint32_t eoqf;
+    uint32_t cont;
+    uint32_t ctas;
+    uint32_t delay;
+    uint32_t eoq;
+    uint32_t pcsx;
+    uint32_t txdata;
+    uint32_t buffer;
 } dspi_ctl;
 
 dspi_ctl dspi;
 
+#define  LED_ON     GPIOC_PSOR=(1<<5)
+#define  LED_OFF    GPIOC_PCOR=(1<<5)
+
+#define  LED2_ON     GPIOC_PSOR=(1<<6)
+#define  LED2_OFF    GPIOC_PCOR=(1<<6)
 
 void vfnDSPIMaster_Init(void);
 void vfnDSPISlave_Init(void);
@@ -41,32 +45,31 @@ unsigned long u32fnDPSISlave_SendByte(unsigned char u8lvData, dspi_ctl *dspi_val
 /********************************************************************/
 int main (void)
 {
-	unsigned char u8vData = 0x01;
-        unsigned char u8vRxData = 0;
-        printf("  ******************************************** \r\n");
-        printf("  *              DSPI Master Slave           * \r\n");
-  	printf("  ******************************************** \r\n");
-
-
-        printf(" Connect PTE2 -> PTD1 \r\n"); 
-        printf(" Connect PTE4 -> PTD0 \r\n");
-        printf(" Connect PTE1 -> PTD3 \r\n");
-        printf(" Connect PTE3 -> PTD2 \r\n");
-        
-        vfnDSPIMaster_Init();
-        vfnDSPISlave_Init();
-        (void)u32fnDPSIMaster_SendByte(u8vData,&dspi);
+    unsigned char u8vData = 0x01;
+    unsigned char u8vRxData = 0;
+    
+    PORTC_PCR5 = PORT_PCR_MUX(0x1); // LED is on PC5 (pin 13), config as GPIO (alt = 1)
+    GPIOC_PDDR = (1<<5);            // make this an output pin
+    LED_OFF;                        // start with LED off
+    
+    
+    vfnDSPIMaster_Init();
+    vfnDSPISlave_Init();
+    (void)u32fnDPSIMaster_SendByte(u8vData,&dspi);
 	while(1)
 	{
           u8vData++;
-         (void)u32fnDPSISlave_SendByte(u8vData,&dspi);   
+          (void)u32fnDPSISlave_SendByte(u8vData,&dspi);   
           u8vRxData = u32fnDPSIMaster_RxByte(u8vData,&dspi);
           if(u8vData == u8vRxData)
-            printf(" Data sent and received %d \r\n" ,u8vRxData);
+          {
+            //printf(" Data sent and received %d \r\n" ,u8vRxData);
+              LED_OFF;
+          }
           else
           {
-            printf(" ERROR No match with sent data!!!! \r\n");
-            while(1);
+              LED_ON;
+              while(1);
           }
 	} 
     return 0;
@@ -76,7 +79,8 @@ int main (void)
 void vfnDSPIMaster_Init(void)
 {
  /* clock gate */
-  SIM_SCGC6 |= SIM_SCGC6_DSPI0_MASK;
+  //SIM_SCGC6 |= SIM_SCGC6_DSPI0_MASK; BV 5-21
+  SIM_SCGC6 |= SIM_SCGC6_SPI0_MASK;
   /* pin mux */
 
   PORTD_PCR0 &= ~PORT_PCR_MUX_MASK;

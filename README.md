@@ -2,4 +2,4 @@
 #Teensy 3.1 SPI Driver                              #
 #####################################################
 
-TBD
+Original Sample Source Code: https://community.freescale.com/thread/303923#comment-314671
