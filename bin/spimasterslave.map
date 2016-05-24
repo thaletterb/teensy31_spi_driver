@@ -15,7 +15,7 @@ LOAD obj/sysinit.o
                 0x0000000020008000                _top_stack = 0x20008000
                 0x0000000000000000                TOTAL_RESERVED_HEAP = 0x0
 
-.text           0x0000000000000000      0xb2c
+.text           0x0000000000000000      0xb1c
  CREATE_OBJECT_SYMBOLS
                 0x0000000000000000                __interrupt_vector_table = .
  *(.interrupt_vector_table)
@@ -132,54 +132,54 @@ LOAD obj/sysinit.o
                 0x000000000000049e                Reserved68_IRQHandler
  *(.text)
  .text          0x00000000000004c4        0x0 obj/crt0.o
- .text          0x00000000000004c4      0x258 obj/spimasterslave.o
+ .text          0x00000000000004c4      0x248 obj/spimasterslave.o
                 0x00000000000004c4                main
-                0x000000000000053c                vfnDSPIMaster_Init
-                0x00000000000005f4                vfnDSPISlave_Init
-                0x000000000000065c                u32fnDPSIMaster_SendByte
-                0x00000000000006d8                u32fnDPSIMaster_RxByte
-                0x00000000000006f8                u32fnDPSISlave_SendByte
- .text          0x000000000000071c      0x410 obj/sysinit.o
-                0x000000000000071c                start
-                0x000000000000072c                sysinit
-                0x0000000000000800                pll_init
-                0x0000000000000afc                wdog_disable
+                0x0000000000000514                vfnDSPIMaster_Init
+                0x00000000000005d8                vfnDSPISlave_Init
+                0x0000000000000640                u32fnDPSIMaster_SendByte
+                0x00000000000006c8                u32fnDPSIMaster_RxByte
+                0x00000000000006e8                u32fnDPSISlave_SendByte
+ .text          0x000000000000070c      0x410 obj/sysinit.o
+                0x000000000000070c                start
+                0x000000000000071c                sysinit
+                0x00000000000007f0                pll_init
+                0x0000000000000aec                wdog_disable
  *(.text.*)
  *(.glue_7)
  .glue_7        0x0000000000000000        0x0 linker stubs
  *(.glue_7t)
  .glue_7t       0x0000000000000000        0x0 linker stubs
-                0x0000000000000b2c                . = ALIGN (0x4)
+                0x0000000000000b1c                . = ALIGN (0x4)
  *(.rodata)
  *(.rodata*)
  *(.init)
  *(.fini)
-                0x0000000000000b2c                . = ALIGN (0x4)
-                0x0000000000000b2c                _end_data_flash = .
+                0x0000000000000b1c                . = ALIGN (0x4)
+                0x0000000000000b1c                _end_data_flash = .
 
-.vfp11_veneer   0x0000000000000b2c        0x0
+.vfp11_veneer   0x0000000000000b1c        0x0
  .vfp11_veneer  0x0000000000000000        0x0 linker stubs
 
-.v4_bx          0x0000000000000b2c        0x0
+.v4_bx          0x0000000000000b1c        0x0
  .v4_bx         0x0000000000000000        0x0 linker stubs
 
-.iplt           0x0000000000000b2c        0x0
+.iplt           0x0000000000000b1c        0x0
  .iplt          0x0000000000000000        0x0 obj/crt0.o
 
-.rel.dyn        0x0000000000000b2c        0x0
+.rel.dyn        0x0000000000000b1c        0x0
  .rel.iplt      0x0000000000000000        0x0 obj/crt0.o
 
 .RAMVectorTable
  *(.RAMVectorTable)
-                0x0000000000000b2c                . = ALIGN (0x4)
-                0x0000000000000b2c                PROVIDE (__exidx_start, .)
+                0x0000000000000b1c                . = ALIGN (0x4)
+                0x0000000000000b1c                PROVIDE (__exidx_start, .)
 
 .ARM.exidx
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-                0x0000000000000b2c                PROVIDE (__exidx_end, .)
+                0x0000000000000b1c                PROVIDE (__exidx_end, .)
 
-.data           0x000000001fff8000        0x0 load address 0x0000000000000b2c
-                0x0000000000000b2c                _start_data_flash = LOADADDR (.data)
+.data           0x000000001fff8000        0x0 load address 0x0000000000000b1c
+                0x0000000000000b1c                _start_data_flash = LOADADDR (.data)
                 0x000000001fff8000                _start_data = .
  *(.data)
  .data          0x000000001fff8000        0x0 obj/crt0.o
@@ -189,7 +189,7 @@ LOAD obj/sysinit.o
  *(.shdata)
                 0x000000001fff8000                _end_data = .
 
-.igot.plt       0x000000001fff8000        0x0 load address 0x0000000000000b2c
+.igot.plt       0x000000001fff8000        0x0 load address 0x0000000000000b1c
  .igot.plt      0x0000000000000000        0x0 obj/crt0.o
                 0x000000001fff8000                . = ALIGN (0x4)
                 0x0000000000000000                _data_size = (_end_data - _start_data)
@@ -199,7 +199,7 @@ LOAD obj/sysinit.o
  *(.noinit.*)
                 0x000000001fff8000                _start_bss = .
 
-.bss            0x000000001fff8000       0x54 load address 0x0000000000000b2c
+.bss            0x000000001fff8000       0x54 load address 0x0000000000000b1c
  *(.bss)
  .bss           0x000000001fff8000        0x0 obj/crt0.o
  .bss           0x000000001fff8000       0x44 obj/spimasterslave.o
@@ -237,13 +237,13 @@ OUTPUT(bin/spimasterslave.elf elf32-littlearm)
                                          0x71 (size before relaxing)
  .comment       0x0000000000000000       0x71 obj/sysinit.o
 
-.debug_info     0x0000000000000000      0xcf8
- .debug_info    0x0000000000000000      0x70e obj/spimasterslave.o
- .debug_info    0x000000000000070e      0x5ea obj/sysinit.o
+.debug_info     0x0000000000000000      0xd09
+ .debug_info    0x0000000000000000      0x71f obj/spimasterslave.o
+ .debug_info    0x000000000000071f      0x5ea obj/sysinit.o
 
-.debug_abbrev   0x0000000000000000      0x2f9
- .debug_abbrev  0x0000000000000000      0x187 obj/spimasterslave.o
- .debug_abbrev  0x0000000000000187      0x172 obj/sysinit.o
+.debug_abbrev   0x0000000000000000      0x308
+ .debug_abbrev  0x0000000000000000      0x196 obj/spimasterslave.o
+ .debug_abbrev  0x0000000000000196      0x172 obj/sysinit.o
 
 .debug_aranges  0x0000000000000000       0x40
  .debug_aranges
@@ -251,9 +251,9 @@ OUTPUT(bin/spimasterslave.elf elf32-littlearm)
  .debug_aranges
                 0x0000000000000020       0x20 obj/sysinit.o
 
-.debug_line     0x0000000000000000      0x4bf
- .debug_line    0x0000000000000000      0x1e4 obj/spimasterslave.o
- .debug_line    0x00000000000001e4      0x2db obj/sysinit.o
+.debug_line     0x0000000000000000      0x4c3
+ .debug_line    0x0000000000000000      0x1e8 obj/spimasterslave.o
+ .debug_line    0x00000000000001e8      0x2db obj/sysinit.o
 
 .debug_str      0x0000000000000000      0x5b5
  .debug_str     0x0000000000000000      0x3d2 obj/spimasterslave.o

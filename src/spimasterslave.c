@@ -45,17 +45,21 @@ unsigned long u32fnDPSISlave_SendByte(unsigned char u8lvData, dspi_ctl *dspi_val
 /********************************************************************/
 int main (void)
 {
-    unsigned char u8vData = 0x01;
+    unsigned char u8vData = 0xAA;
     unsigned char u8vRxData = 0;
     
     PORTC_PCR5 = PORT_PCR_MUX(0x1);                 // LED is on PC5 (pin 13), config as GPIO (alt = 1)
     GPIOC_PDDR = (1<<5);                            // make this an output pin
-    LED_OFF;                                        // start with LED off
-    
+    //LED_OFF;                                        // start with LED off
     
     vfnDSPIMaster_Init();                           // Init the SPI Master
-    vfnDSPISlave_Init();                            // Init the SPI Slave
+   
+    volatile uint32_t n;
+   while(1){ 
+    for (n=0; n<8000000; n++)  ;    // dumb delay
+    //vfnDSPISlave_Init();                            // Init the SPI Slave
     (void)u32fnDPSIMaster_SendByte(u8vData,&dspi);  // Send byte
+   }
 	while(1)
 	{
           u8vData++;
@@ -93,6 +97,8 @@ void vfnDSPIMaster_Init(void)
   PORTD_PCR3 |= PORT_PCR_MUX(2);    //SPI0_SIN - Alt Function 2
 
   SPI0_CTAR0 = SPI_CTAR_FMSZ(0xF) | SPI_CTAR_CPOL_MASK;                     // Clock Transfer and Attributes Register. Frame Size and CPOL
+  SPI0_CTAR0 |= (1<<2) | 1; // 0b0101 in BR bits to divide SPI SCK by 36 
+  SPI0_CTAR |= (1<<14);     // 0b0100 in CSSCK bits to scale delay by 32
 
   /*Set SPI mode Master, Halt and Incoming data is shifted into the shift register.  */
   SPI0_MCR = SPI_MCR_MSTR_MASK | SPI_MCR_PCSIS(0x1) | SPI_MCR_HALT_MASK;    // Module Configuration Register
@@ -133,16 +139,19 @@ unsigned long u32fnDPSIMaster_SendByte(unsigned char u8lvData, dspi_ctl *dspi_va
   unsigned long u32ID;
  /*Commands to Flash Memory*/
   SPI0_CTAR0 = SPI_CTAR_FMSZ(0xF) | dspi_value->br | dspi_value->cpha | SPI_CTAR_CPOL_MASK;
-  SPI0_PUSHR = SPI_PUSHR_EOQ_MASK | SPI_PUSHR_PCS(0x1) | u8lvData;  
+  SPI0_CTAR0 |= (1<<2) | 1; // 0101 to divide by 36     TODO - USE BIT MASKS DEFINED IN .h files
+  SPI0_CTAR |= (1<<14);     // 0b0100 in CSSCK bits to scale delay by 32
+  SPI0_PUSHR = SPI_PUSHR_EOQ_MASK | SPI_PUSHR_PCS(0x1) | (u8lvData);  
   
   /*Start transmition*/
-  SPI0_MCR &= ~SPI_MCR_HALT_MASK;
+  SPI0_MCR &= ~SPI_MCR_HALT_MASK;       // Clear  the HALT Bit - Start Transfers
   
-  while( !(SPI0_SR & SPI_SR_EOQF_MASK)) //EOQF
+  while( !(SPI0_SR & SPI_SR_EOQF_MASK)) //EOQF - End of queue FIFO
   {}
   u32ID = SPI0_POPR ; 
-  SPI0_SR |=  SPI_SR_EOQF_MASK | SPI_SR_TCF_MASK | SPI_SR_RFDF_MASK ;
-  SPI0_MCR |= SPI_MCR_HALT_MASK;
+  SPI0_SR |=  SPI_SR_EOQF_MASK | SPI_SR_TCF_MASK | SPI_SR_RFDF_MASK ;   // Writing a 1 clears bits in the SR
+                                                                        // Clear the end of queue, 
+  SPI0_MCR |= SPI_MCR_HALT_MASK;    // Clear the HALT bit - End Transfers
   
   return u32ID;
 }
