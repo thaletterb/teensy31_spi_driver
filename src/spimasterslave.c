@@ -88,15 +88,16 @@ void vfnDSPIMaster_Init(void)
 
   /* pin mux */
   PORTD_PCR0 &= ~PORT_PCR_MUX_MASK;
-  PORTD_PCR0 |= PORT_PCR_MUX(2);    //SPI0_PCS0 - Alt Function 2
+  PORTD_PCR0 |= PORT_PCR_MUX(2);    //SPI0_PCS0 - Alt Function 2. PTD0 - Teensy 2
   PORTD_PCR1 &= ~PORT_PCR_MUX_MASK;
-  PORTD_PCR1 |= PORT_PCR_MUX(2);    //SPI0_SCK - Alt Function 2
+  PORTD_PCR1 |= PORT_PCR_MUX(2);    //SPI0_SCK - Alt Function 2 - PTD1 - Teensy 14
   PORTD_PCR2 &= ~PORT_PCR_MUX_MASK;
-  PORTD_PCR2 |= PORT_PCR_MUX(2);    //SPI0_SOUT - Alt Function 2
+  PORTD_PCR2 |= PORT_PCR_MUX(2);    //SPI0_SOUT - Alt Function 2 - PTD2 - Teensy 7
   PORTD_PCR3 &= ~PORT_PCR_MUX_MASK;
-  PORTD_PCR3 |= PORT_PCR_MUX(2);    //SPI0_SIN - Alt Function 2
+  PORTD_PCR3 |= PORT_PCR_MUX(2);    //SPI0_SIN - Alt Function 2 - PTD3 - Teensy 8
 
-  SPI0_CTAR0 = SPI_CTAR_FMSZ(0xF) | SPI_CTAR_CPOL_MASK;                     // Clock Transfer and Attributes Register. Frame Size and CPOL
+  //SPI0_CTAR0 = SPI_CTAR_FMSZ(0xF) | SPI_CTAR_CPOL_MASK;                     // Clock Transfer and Attributes Register. Frame Size and CPOL
+  SPI0_CTAR0 = SPI_CTAR_FMSZ(0x7) | SPI_CTAR_CPOL_MASK;                     // Clock Transfer and Attributes Register. Frame Size and CPOL
   SPI0_CTAR0 |= (1<<2) | 1; // 0b0101 in BR bits to divide SPI SCK by 36 
   SPI0_CTAR0 |= (1<<14);     // 0b0100 in CSSCK bits to scale delay by 32
 
@@ -138,10 +139,11 @@ unsigned long u32fnDPSIMaster_SendByte(unsigned char u8lvData, dspi_ctl *dspi_va
 {
   unsigned long u32ID;
  /*Commands to Flash Memory*/
-  SPI0_CTAR0 = SPI_CTAR_FMSZ(0xF) | dspi_value->br | dspi_value->cpha | SPI_CTAR_CPOL_MASK;
+  //SPI0_CTAR0 = SPI_CTAR_FMSZ(0xF) | dspi_value->br | dspi_value->cpha | SPI_CTAR_CPOL_MASK;
+  SPI0_CTAR0 = SPI_CTAR_FMSZ(0x7) | dspi_value->br | dspi_value->cpha | SPI_CTAR_CPOL_MASK;
   SPI0_CTAR0 |= (1<<2) | 1; // 0101 to divide by 36     TODO - USE BIT MASKS DEFINED IN .h files
   SPI0_CTAR0 |= (1<<14);     // 0b0100 in CSSCK bits to scale delay by 32
-  SPI0_PUSHR = SPI_PUSHR_EOQ_MASK | SPI_PUSHR_PCS(0x1) | (u8lvData << 7);  
+  SPI0_PUSHR = SPI_PUSHR_EOQ_MASK | SPI_PUSHR_PCS(0x1) | (u8lvData);  
   
   /*Start transmition*/
   SPI0_MCR &= ~SPI_MCR_HALT_MASK;       // Clear  the HALT Bit - Start Transfers
