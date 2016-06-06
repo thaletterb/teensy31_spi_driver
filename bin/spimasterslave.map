@@ -11,11 +11,12 @@ Linker script and memory map
 LOAD obj/crt0.o
 LOAD obj/spimasterslave.o
 LOAD obj/sysinit.o
+LOAD obj/teensy31_spi.o
                 0x0000000000002004                TOTAL_RESERVED_STACK = 0x2004
                 0x0000000020008000                _top_stack = 0x20008000
                 0x0000000000000000                TOTAL_RESERVED_HEAP = 0x0
 
-.text           0x0000000000000000      0xb4c
+.text           0x0000000000000000      0xb58
  CREATE_OBJECT_SYMBOLS
                 0x0000000000000000                __interrupt_vector_table = .
  *(.interrupt_vector_table)
@@ -132,64 +133,66 @@ LOAD obj/sysinit.o
                 0x000000000000049e                Reserved68_IRQHandler
  *(.text)
  .text          0x00000000000004c4        0x0 obj/crt0.o
- .text          0x00000000000004c4      0x278 obj/spimasterslave.o
+ .text          0x00000000000004c4       0x84 obj/spimasterslave.o
                 0x00000000000004c4                main
-                0x0000000000000528                vfnDSPIMaster_Init
-                0x00000000000005f8                vfnDSPISlave_Init
-                0x0000000000000660                u32fnDPSIMaster_SendByte
-                0x00000000000006f8                u32fnDPSIMaster_RxByte
-                0x0000000000000718                u32fnDPSISlave_SendByte
- .text          0x000000000000073c      0x410 obj/sysinit.o
-                0x000000000000073c                start
-                0x000000000000074c                sysinit
-                0x0000000000000820                pll_init
-                0x0000000000000b1c                wdog_disable
+ .text          0x0000000000000548      0x410 obj/sysinit.o
+                0x0000000000000548                start
+                0x0000000000000558                sysinit
+                0x000000000000062c                pll_init
+                0x0000000000000928                wdog_disable
+ .text          0x0000000000000958      0x200 obj/teensy31_spi.o
+                0x0000000000000958                vfnDSPIMaster_Init
+                0x0000000000000a14                u32fnDPSIMaster_SendByte
+                0x0000000000000aac                vfnDSPISlave_Init
+                0x0000000000000b14                u32fnDPSIMaster_RxByte
+                0x0000000000000b34                u32fnDPSISlave_SendByte
  *(.text.*)
  *(.glue_7)
  .glue_7        0x0000000000000000        0x0 linker stubs
  *(.glue_7t)
  .glue_7t       0x0000000000000000        0x0 linker stubs
-                0x0000000000000b4c                . = ALIGN (0x4)
+                0x0000000000000b58                . = ALIGN (0x4)
  *(.rodata)
  *(.rodata*)
  *(.init)
  *(.fini)
-                0x0000000000000b4c                . = ALIGN (0x4)
-                0x0000000000000b4c                _end_data_flash = .
+                0x0000000000000b58                . = ALIGN (0x4)
+                0x0000000000000b58                _end_data_flash = .
 
-.vfp11_veneer   0x0000000000000b4c        0x0
+.vfp11_veneer   0x0000000000000b58        0x0
  .vfp11_veneer  0x0000000000000000        0x0 linker stubs
 
-.v4_bx          0x0000000000000b4c        0x0
+.v4_bx          0x0000000000000b58        0x0
  .v4_bx         0x0000000000000000        0x0 linker stubs
 
-.iplt           0x0000000000000b4c        0x0
+.iplt           0x0000000000000b58        0x0
  .iplt          0x0000000000000000        0x0 obj/crt0.o
 
-.rel.dyn        0x0000000000000b4c        0x0
+.rel.dyn        0x0000000000000b58        0x0
  .rel.iplt      0x0000000000000000        0x0 obj/crt0.o
 
 .RAMVectorTable
  *(.RAMVectorTable)
-                0x0000000000000b4c                . = ALIGN (0x4)
-                0x0000000000000b4c                PROVIDE (__exidx_start, .)
+                0x0000000000000b58                . = ALIGN (0x4)
+                0x0000000000000b58                PROVIDE (__exidx_start, .)
 
 .ARM.exidx
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-                0x0000000000000b4c                PROVIDE (__exidx_end, .)
+                0x0000000000000b58                PROVIDE (__exidx_end, .)
 
-.data           0x000000001fff8000        0x0 load address 0x0000000000000b4c
-                0x0000000000000b4c                _start_data_flash = LOADADDR (.data)
+.data           0x000000001fff8000        0x0 load address 0x0000000000000b58
+                0x0000000000000b58                _start_data_flash = LOADADDR (.data)
                 0x000000001fff8000                _start_data = .
  *(.data)
  .data          0x000000001fff8000        0x0 obj/crt0.o
  .data          0x000000001fff8000        0x0 obj/spimasterslave.o
  .data          0x000000001fff8000        0x0 obj/sysinit.o
+ .data          0x000000001fff8000        0x0 obj/teensy31_spi.o
  *(.data.*)
  *(.shdata)
                 0x000000001fff8000                _end_data = .
 
-.igot.plt       0x000000001fff8000        0x0 load address 0x0000000000000b4c
+.igot.plt       0x000000001fff8000        0x0 load address 0x0000000000000b58
  .igot.plt      0x0000000000000000        0x0 obj/crt0.o
                 0x000000001fff8000                . = ALIGN (0x4)
                 0x0000000000000000                _data_size = (_end_data - _start_data)
@@ -199,7 +202,7 @@ LOAD obj/sysinit.o
  *(.noinit.*)
                 0x000000001fff8000                _start_bss = .
 
-.bss            0x000000001fff8000       0x54 load address 0x0000000000000b4c
+.bss            0x000000001fff8000       0x54 load address 0x0000000000000b58
  *(.bss)
  .bss           0x000000001fff8000        0x0 obj/crt0.o
  .bss           0x000000001fff8000       0x44 obj/spimasterslave.o
@@ -209,6 +212,7 @@ LOAD obj/sysinit.o
                 0x000000001fff8048                mcg_clk_khz
                 0x000000001fff804c                core_clk_khz
                 0x000000001fff8050                periph_clk_khz
+ .bss           0x000000001fff8054        0x0 obj/teensy31_spi.o
  *(.bss.*)
  *(COMMON)
                 0x000000001fff8054                . = ALIGN (0x4)
@@ -231,39 +235,50 @@ OUTPUT(bin/spimasterslave.elf elf32-littlearm)
                 0x0000000000000021       0x33 obj/spimasterslave.o
  .ARM.attributes
                 0x0000000000000054       0x33 obj/sysinit.o
+ .ARM.attributes
+                0x0000000000000087       0x33 obj/teensy31_spi.o
 
 .comment        0x0000000000000000       0x70
  .comment       0x0000000000000000       0x70 obj/spimasterslave.o
                                          0x71 (size before relaxing)
  .comment       0x0000000000000000       0x71 obj/sysinit.o
+ .comment       0x0000000000000000       0x71 obj/teensy31_spi.o
 
-.debug_info     0x0000000000000000      0xd09
- .debug_info    0x0000000000000000      0x71f obj/spimasterslave.o
- .debug_info    0x000000000000071f      0x5ea obj/sysinit.o
+.debug_info     0x0000000000000000      0xf4d
+ .debug_info    0x0000000000000000      0x313 obj/spimasterslave.o
+ .debug_info    0x0000000000000313      0x5ea obj/sysinit.o
+ .debug_info    0x00000000000008fd      0x650 obj/teensy31_spi.o
 
-.debug_abbrev   0x0000000000000000      0x308
- .debug_abbrev  0x0000000000000000      0x196 obj/spimasterslave.o
- .debug_abbrev  0x0000000000000196      0x172 obj/sysinit.o
+.debug_abbrev   0x0000000000000000      0x40b
+ .debug_abbrev  0x0000000000000000      0x109 obj/spimasterslave.o
+ .debug_abbrev  0x0000000000000109      0x172 obj/sysinit.o
+ .debug_abbrev  0x000000000000027b      0x190 obj/teensy31_spi.o
 
-.debug_aranges  0x0000000000000000       0x40
+.debug_aranges  0x0000000000000000       0x60
  .debug_aranges
                 0x0000000000000000       0x20 obj/spimasterslave.o
  .debug_aranges
                 0x0000000000000020       0x20 obj/sysinit.o
+ .debug_aranges
+                0x0000000000000040       0x20 obj/teensy31_spi.o
 
-.debug_line     0x0000000000000000      0x4c8
- .debug_line    0x0000000000000000      0x1ed obj/spimasterslave.o
- .debug_line    0x00000000000001ed      0x2db obj/sysinit.o
+.debug_line     0x0000000000000000      0x69a
+ .debug_line    0x0000000000000000      0x1d7 obj/spimasterslave.o
+ .debug_line    0x00000000000001d7      0x2db obj/sysinit.o
+ .debug_line    0x00000000000004b2      0x1e8 obj/teensy31_spi.o
 
-.debug_str      0x0000000000000000      0x5b5
- .debug_str     0x0000000000000000      0x3d2 obj/spimasterslave.o
-                                        0x417 (size before relaxing)
- .debug_str     0x00000000000003d2      0x1e3 obj/sysinit.o
+.debug_str      0x0000000000000000      0x5ca
+ .debug_str     0x0000000000000000      0x21f obj/spimasterslave.o
+                                        0x264 (size before relaxing)
+ .debug_str     0x000000000000021f      0x29a obj/sysinit.o
                                         0x3fc (size before relaxing)
+ .debug_str     0x00000000000004b9      0x111 obj/teensy31_spi.o
+                                        0x3c0 (size before relaxing)
 
-.debug_frame    0x0000000000000000      0x134
- .debug_frame   0x0000000000000000       0xb8 obj/spimasterslave.o
- .debug_frame   0x00000000000000b8       0x7c obj/sysinit.o
+.debug_frame    0x0000000000000000      0x144
+ .debug_frame   0x0000000000000000       0x30 obj/spimasterslave.o
+ .debug_frame   0x0000000000000030       0x7c obj/sysinit.o
+ .debug_frame   0x00000000000000ac       0x98 obj/teensy31_spi.o
 
 Cross Reference Table
 
@@ -393,10 +408,12 @@ pll_init                                          obj/sysinit.o
 start                                             obj/sysinit.o
                                                   obj/crt0.o
 sysinit                                           obj/sysinit.o
-u32fnDPSIMaster_RxByte                            obj/spimasterslave.o
-u32fnDPSIMaster_SendByte                          obj/spimasterslave.o
-u32fnDPSISlave_SendByte                           obj/spimasterslave.o
-vfnDSPIMaster_Init                                obj/spimasterslave.o
-vfnDSPISlave_Init                                 obj/spimasterslave.o
+u32fnDPSIMaster_RxByte                            obj/teensy31_spi.o
+u32fnDPSIMaster_SendByte                          obj/teensy31_spi.o
+                                                  obj/spimasterslave.o
+u32fnDPSISlave_SendByte                           obj/teensy31_spi.o
+vfnDSPIMaster_Init                                obj/teensy31_spi.o
+                                                  obj/spimasterslave.o
+vfnDSPISlave_Init                                 obj/teensy31_spi.o
 wdog_disable                                      obj/sysinit.o
                                                   obj/crt0.o

@@ -41,7 +41,8 @@ CPU = cortex-m4
 #  any code needed to get the PLL configured.
 OBJECTS	+= $(PROJECT).o \
 	       sysinit.o \
-	       crt0.o
+	       crt0.o \
+			teensy31_spi.o
 
 #  Select the toolchain by providing a path to the top level
 #  directory; this will be the folder that holds the
